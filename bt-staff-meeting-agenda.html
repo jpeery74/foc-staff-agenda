@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Weekly Staff Meeting Agenda — Best Transportation</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;1,300&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0d0f14;
+  --surface: #13161f;
+  --surface2: #1a1e2a;
+  --surface3: #1e2230;
+  --border: #252a38;
+  --border2: #2e3447;
+  --text: #dde1ec;
+  --muted: #5a6280;
+  --faint: #363d55;
+  --accent: #c8a55a;
+  --accent-dim: rgba(200,165,90,0.12);
+  --green: #5cb87a;
+  --red: #d95c5c;
+  --blue: #5b8fc9;
+  --purple: #8b6fc8;
+  --teal: #4db8a0;
+  --orange: #d4825a;
+  --radius: 6px;
+  --mono: 'IBM Plex Mono', monospace;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:'IBM Plex Sans',sans-serif;font-weight:300;min-height:100vh;line-height:1.5}
+.app{max-width:1040px;margin:0 auto;padding:2.5rem 1.5rem 5rem}
+
+/* HEADER */
+.header{display:flex;justify-content:space-between;align-items:flex-start;padding-bottom:1.5rem;border-bottom:1px solid var(--border);margin-bottom:0;gap:1rem;flex-wrap:wrap;animation:fadeIn .4s ease both}
+.header-left h1{font-family:'Playfair Display',serif;font-size:1.9rem;color:var(--text);letter-spacing:-.01em;line-height:1.1}
+.header-left .org{font-family:var(--mono);font-size:.68rem;color:var(--muted);letter-spacing:.15em;text-transform:uppercase;margin-top:.4rem}
+.header-right{text-align:right}
+.date-chip{font-family:'Playfair Display',serif;font-size:1.3rem;color:var(--accent)}
+.meeting-time{font-family:var(--mono);font-size:.68rem;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;margin-top:.3rem}
+
+/* TABS */
+.tabs{display:flex;border-bottom:1px solid var(--border);margin-bottom:2rem;animation:fadeIn .4s .1s ease both}
+.tab{font-family:var(--mono);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding:.85rem 1.4rem;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:color .2s,border-color .2s;user-select:none}
+.tab:hover{color:var(--text)}
+.tab.active{color:var(--accent);border-bottom-color:var(--accent)}
+.arc-count{display:inline-block;background:var(--border2);color:var(--muted);font-family:var(--mono);font-size:.6rem;padding:.1rem .4rem;border-radius:99px;margin-left:.4rem;vertical-align:middle}
+
+/* STATUS */
+.status-row{display:flex;align-items:center;gap:.6rem;padding:.6rem .9rem;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:1.5rem;font-family:var(--mono);font-size:.68rem;color:var(--muted);letter-spacing:.06em}
+.status-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s infinite;flex-shrink:0}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* PROGRESS */
+.prog-wrap{height:3px;background:var(--border);border-radius:99px;margin-bottom:.4rem;overflow:hidden}
+.prog-fill{height:100%;background:var(--accent);border-radius:99px;transition:width .4s ease}
+.prog-label{font-family:var(--mono);font-size:.65rem;color:var(--muted);letter-spacing:.1em;text-align:right;margin-bottom:1.5rem}
+
+/* SECTION CARDS */
+.sc{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:.85rem;overflow:hidden;animation:fadeIn .4s ease both;transition:border-color .2s}
+.sc:hover{border-color:var(--border2)}
+.sc-hdr{display:flex;align-items:center;gap:.85rem;padding:1rem 1.25rem;cursor:pointer;user-select:none}
+.sc-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.sc-title{font-family:'Playfair Display',serif;font-size:1rem;font-weight:400;flex:1}
+.sc-sub{font-family:var(--mono);font-size:.6rem;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-top:.1rem}
+.chev{width:16px;height:16px;color:var(--faint);transition:transform .25s;flex-shrink:0}
+.chev.open{transform:rotate(90deg)}
+.sc-body{display:none;padding:0 1.25rem 1.4rem;border-top:1px solid var(--border)}
+.sc-body.open{display:block}
+
+/* TABLES */
+.tbl-wrap{margin-top:1rem;overflow-x:auto}
+.tbl-lbl{font-family:var(--mono);font-size:.63rem;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.5rem}
+table{width:100%;border-collapse:collapse;font-size:.84rem}
+thead th{font-family:var(--mono);font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding:.5rem .7rem;text-align:left;border-bottom:1px solid var(--border2);white-space:nowrap;background:var(--surface2)}
+tbody tr{border-bottom:1px solid var(--border)}
+tbody tr:last-child{border-bottom:none}
+tbody tr:hover{background:rgba(255,255,255,.02)}
+tbody td{padding:0;vertical-align:middle}
+tbody td input,tbody td textarea,tbody td select{width:100%;background:transparent;border:none;border-right:1px solid var(--border);color:var(--text);font-family:'IBM Plex Sans',sans-serif;font-weight:300;font-size:.84rem;padding:.55rem .7rem;resize:none;line-height:1.4;transition:background .15s}
+tbody td:last-child input,tbody td:last-child textarea,tbody td:last-child select{border-right:none}
+tbody td input:focus,tbody td textarea:focus,tbody td select:focus{outline:none;background:var(--surface3)}
+tbody td textarea{min-height:56px}
+tbody td select{cursor:pointer}
+tbody td select option{background:var(--surface2)}
+
+/* YTD total row */
+.ytd-row{background:var(--surface2)!important}
+.ytd-row td input{color:var(--accent);font-family:var(--mono);font-size:.78rem;font-weight:500}
+.ytd-row td:first-child input{color:var(--accent);font-family:var(--mono);font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;font-style:normal}
+
+/* readonly label cells */
+.lbl-cell{color:var(--muted);font-style:italic}
+.lbl-cell-bold{color:var(--accent);font-family:var(--mono);font-size:.78rem;letter-spacing:.06em}
+
+/* col widths */
+.cw-xs{width:70px;min-width:60px}
+.cw-sm{width:100px;min-width:85px}
+.cw-md{width:140px;min-width:115px}
+.cw-lg{width:190px;min-width:150px}
+.cw-xl{width:230px;min-width:170px}
+.cw-pct{width:80px;min-width:70px}
+.cw-act{width:32px;min-width:32px;text-align:center}
+.cw-flex{min-width:160px}
+.pct-inp{text-align:center;font-family:var(--mono);font-size:.82rem}
+
+/* add row / delete */
+.add-row{display:inline-flex;align-items:center;gap:.4rem;background:none;border:1px dashed var(--border2);color:var(--muted);font-family:var(--mono);font-size:.65rem;letter-spacing:.08em;text-transform:uppercase;padding:.4rem .85rem;border-radius:var(--radius);cursor:pointer;margin-top:.5rem;transition:border-color .15s,color .15s}
+.add-row:hover{border-color:var(--text);color:var(--text)}
+.row-del{background:none;border:none;color:var(--faint);cursor:pointer;font-size:1rem;padding:.3rem .5rem;transition:color .15s;line-height:1}
+.row-del:hover{color:var(--red)}
+
+/* notes */
+.nf{margin-top:.9rem}
+.nf .fl{font-family:var(--mono);font-size:.63rem;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:.35rem}
+.nf textarea{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);color:var(--text);font-family:'IBM Plex Sans',sans-serif;font-weight:300;font-size:.88rem;padding:.65rem .85rem;resize:vertical;min-height:68px;transition:border-color .2s;line-height:1.5}
+.nf textarea:focus{outline:none;border-color:var(--accent);background:var(--surface3)}
+
+/* kpi chips */
+.kpi-row{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1rem;margin-bottom:.25rem}
+.kpi-cell{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:.55rem .85rem;transition:border-color .2s}
+.kpi-cell:focus-within{border-color:var(--accent)}
+.kpi-lbl{font-family:var(--mono);font-size:.58rem;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:.2rem}
+.kpi-cell input{background:transparent;border:none;padding:0;font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--text);width:100%;min-width:70px}
+.kpi-cell input:focus{outline:none}
+
+/* divider */
+.divdr{border:none;border-top:1px dashed var(--border2);margin:1.25rem 0 0}
+
+/* P&L toggle */
+.tog-row{display:flex;align-items:center;gap:.75rem;margin:1.1rem 0 .25rem;cursor:pointer;user-select:none}
+.tog-track{width:34px;height:18px;background:var(--border2);border-radius:99px;position:relative;transition:background .2s;flex-shrink:0}
+.tog-track.on{background:var(--accent)}
+.tog-thumb{position:absolute;top:3px;left:3px;width:12px;height:12px;border-radius:50%;background:white;transition:transform .2s}
+.tog-track.on .tog-thumb{transform:translateX(16px)}
+.tog-lbl{font-family:var(--mono);font-size:.68rem;color:var(--muted);letter-spacing:.08em;text-transform:uppercase}
+.tog-sec{overflow:hidden;transition:max-height .3s ease}
+.tog-sec.hidden{max-height:0!important}
+
+/* 3rd-week indicator */
+.week-badge{display:inline-flex;align-items:center;gap:.4rem;font-family:var(--mono);font-size:.63rem;color:var(--muted);letter-spacing:.08em;margin-left:.75rem}
+.week-badge.active{color:var(--accent)}
+.week-dot{width:5px;height:5px;border-radius:50%;background:currentColor}
+
+/* buttons */
+.btn-row{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:1.5rem}
+.btn{font-family:var(--mono);font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;padding:.55rem 1.1rem;border-radius:var(--radius);cursor:pointer;border:1px solid;transition:background .15s,color .15s,border-color .15s;white-space:nowrap}
+.btn-ghost{background:transparent;border-color:var(--border2);color:var(--muted)}
+.btn-ghost:hover{border-color:var(--text);color:var(--text)}
+.btn-accent{background:var(--accent-dim);border-color:var(--accent);color:var(--accent)}
+.btn-accent:hover{background:rgba(200,165,90,.22)}
+.btn-danger{background:transparent;border-color:var(--border2);color:var(--muted)}
+.btn-danger:hover{border-color:var(--red);color:var(--red)}
+.reset-confirm{background:var(--surface2);border:1px solid var(--border2);border-radius:var(--radius);padding:1rem 1.25rem;margin-top:.75rem;display:none}
+.reset-confirm.visible{display:block}
+.reset-confirm p{font-size:.85rem;color:var(--text);margin-bottom:.75rem}
+
+/* archive */
+.arc-week{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:.75rem;overflow:hidden}
+.arc-wk-hdr{display:flex;align-items:center;justify-content:space-between;padding:.9rem 1.25rem;cursor:pointer;user-select:none}
+.arc-wk-hdr:hover{background:var(--surface2)}
+.arc-wk-date{font-family:'Playfair Display',serif;font-size:.95rem;color:var(--text)}
+.arc-wk-meta{font-family:var(--mono);font-size:.65rem;color:var(--muted);letter-spacing:.08em;margin-top:.15rem}
+.arc-body{display:none;padding:1rem 1.25rem 1.25rem;border-top:1px solid var(--border)}
+.arc-body.open{display:block}
+.arc-person{margin-bottom:1.25rem}
+.arc-pname{font-family:'Playfair Display',serif;font-size:.9rem;color:var(--text);margin-bottom:.5rem;padding-bottom:.35rem;border-bottom:1px solid var(--border)}
+.arc-tbl{width:100%;border-collapse:collapse;font-size:.8rem;margin-bottom:.6rem}
+.arc-tbl th{font-family:var(--mono);font-size:.58rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:.35rem .6rem;border-bottom:1px solid var(--border2);text-align:left;background:var(--surface2)}
+.arc-tbl td{padding:.4rem .6rem;border-bottom:1px solid var(--border);color:var(--text);vertical-align:top}
+.arc-tbl tr:last-child td{border-bottom:none}
+.arc-field{margin-bottom:.55rem}
+.arc-fl{font-family:var(--mono);font-size:.58rem;color:var(--faint);letter-spacing:.1em;text-transform:uppercase;margin-bottom:.1rem}
+.arc-fv{font-size:.84rem;color:var(--text);line-height:1.5;white-space:pre-wrap}
+.empty-arc{text-align:center;padding:3rem 1rem;font-family:var(--mono);font-size:.75rem;color:var(--faint);letter-spacing:.1em;text-transform:uppercase}
+
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@media print{body{background:white;color:black}.tabs,.btn-row,.status-row{display:none}.sc-body{display:block!important}.tog-sec.hidden{max-height:500px!important}table{font-size:.75rem}}
+</style>
+</head>
+<body>
+<div class="app">
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-left">
+    <h1>Weekly Staff Meeting Agenda</h1>
+    <div class="org">Best Transportation &nbsp;·&nbsp; Standing Weekly Meeting</div>
+  </div>
+  <div class="header-right">
+    <div class="date-chip" id="dateDisplay">—</div>
+    <div class="meeting-time">Wednesday &nbsp;·&nbsp; 10:30 AM</div>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="tabs">
+  <div class="tab active" id="tab-agenda" onclick="switchTab('agenda')">Current Agenda</div>
+  <div class="tab" id="tab-archive" onclick="switchTab('archive')">Archive <span class="arc-count" id="arcCount">0</span></div>
+</div>
+
+<!-- ═══════════ AGENDA VIEW ═══════════ -->
+<div id="view-agenda">
+
+  <div class="status-row">
+    <div class="status-dot"></div>
+    <span id="statusText">Last saved — never</span>
+    <span style="margin-left:auto;color:var(--faint)">Auto-archives Mon 8:00 AM</span>
+  </div>
+  <div class="prog-wrap"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
+  <div class="prog-label" id="progLabel">0 of 8 sections with content</div>
+
+  <!-- ── CHRISTINE ── -->
+  <div class="sc" style="animation-delay:.04s">
+    <div class="sc-hdr" onclick="tog('christine')">
+      <div class="sc-dot" style="background:var(--blue)"></div>
+      <div style="flex:1"><div class="sc-title">Christine</div><div class="sc-sub">Sales</div></div>
+      <svg class="chev" id="chev-christine" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6,4 10,8 6,12"/></svg>
+    </div>
+    <div class="sc-body" id="body-christine">
+      <div class="tbl-wrap">
+        <div class="tbl-lbl">Sales Performance</div>
+        <table>
+          <thead><tr>
+            <th class="cw-lg">Month</th>
+            <th class="cw-md">Actual</th>
+            <th class="cw-md">Goal</th>
+            <th class="cw-pct">% of Goal</th>
+            <th class="cw-act"></th>
+          </tr></thead>
+          <tbody id="tb-christine"></tbody>
+          <tfoot>
+            <tr class="ytd-row">
+              <td><input type="text" value="YTD TOTAL" readonly style="font-family:var(--mono);font-size:.72rem;letter-spacing:.08em;color:var(--accent);background:transparent;border:none;padding:.55rem .7rem;width:100%"></td>
+              <td><input type="text" id="ytd-actual" placeholder="$—" oninput="as()" style="font-family:var(--mono);font-size:.82rem;color:var(--accent);border-right:1px solid var(--border)"></td>
+              <td><input type="text" id="ytd-goal" placeholder="$—" oninput="as()" style="font-family:var(--mono);font-size:.82rem;color:var(--accent);border-right:1px solid var(--border)"></td>
+              <td><input type="text" id="ytd-pct" placeholder="—%" oninput="as()" class="pct-inp" style="font-family:var(--mono);font-size:.82rem;color:var(--accent)"></td>
+              <td class="cw-act"></td>
+            </tr>
+          </tfoot>
+        </table>
+        <button class="add-row" onclick="addRow('christine',christineRow)">+ Add month</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── CLINTON ── -->
+  <div class="sc" style="animation-delay:.08s">
+    <div class="sc-hdr" onclick="tog('clinton')">
+      <div class="sc-dot" style="background:var(--orange)"></div>
+      <div style="flex:1"><div class="sc-title">Clinton</div><div class="sc-sub">Fleet / Operations</div></div>
+      <svg class="chev" id="chev-clinton" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6,4 10,8 6,12"/></svg>
+    </div>
+    <div class="sc-body" id="body-clinton">
+      <div class="tbl-wrap">
+        <div class="tbl-lbl">Best Transportation — Vehicles Out of Service</div>
+        <table>
+          <thead><tr><th class="cw-sm">Unit #</th><th class="cw-md">Location</th><th class="cw-lg">Issue</th><th class="cw-md">Est. Return</th><th class="cw-flex">Notes</th><th class="cw-act"></th></tr></thead>
+          <tbody id="tb-clinton-bt"></tbody>
+        </table>
+        <button class="add-row" onclick="addRow('clinton-bt',oosRow)">+ Add vehicle</button>
+      </div>
+      <hr class="divdr">
+      <div class="tbl-wrap" style="margin-top:1rem">
+        <div class="tbl-lbl">County Cab — Vehicles Out of Service</div>
+        <table>
+          <thead><tr><th class="cw-sm">Unit #</th><th class="cw-md">Location</th><th class="cw-lg">Issue</th><th class="cw-md">Est. Return</th><th class="cw-flex">Notes</th><th class="cw-act"></th></tr></thead>
+          <tbody id="tb-clinton-cc"></tbody>
+        </table>
+        <button class="add-row" onclick="addRow('clinton-cc',oosRow)">+ Add vehicle</button>
+      </div>
+      <hr class="divdr">
+      <div class="tbl-wrap" style="margin-top:1rem">
+        <div class="tbl-lbl">County Cab — Spare Fleet &amp; Driver Availability</div>
+        <table>
+          <thead><tr><th class="cw-xl">Item</th><th class="cw-flex">Count / Status</th></tr></thead>
+          <tbody>
+            <tr><td><input type="text" class="lbl-cell" value="Spare cabs available" readonly></td><td><input type="text" id="clinton-spare-cabs" placeholder="—" oninput="as()"></td></tr>
+            <tr><td><input type="text" class="lbl-cell" value="Capacity for new drivers" readonly></td><td><input type="text" id="clinton-spare-drivers" placeholder="—" oninput="as()"></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="nf"><div class="fl">Vehicle Needs — Next 3 Months</div><textarea id="clinton-needs" placeholder="Upcoming acquisitions, replacements, inspections due…" oninput="as()"></textarea></div>
+    </div>
+  </div>
+
+  <!-- ── APRIL ── -->
+  <div class="sc" style="animation-delay:.12s">
+    <div class="sc-hdr" onclick="tog('april')">
+      <div class="sc-dot" style="background:var(--green)"></div>
+      <div style="flex:1"><div class="sc-title">April</div><div class="sc-sub">Accounting / Finance</div></div>
+      <svg class="chev" id="chev-april" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6,4 10,8 6,12"/></svg>
+    </div>
+    <div class="sc-body" id="body-april">
+      <div class="tbl-wrap">
+        <div class="tbl-lbl">Best Transportation — A/R Aging</div>
+        <table>
+          <thead><tr><th class="cw-lg">Aging Bucket</th><th class="cw-md">Amount</th><th class="cw-flex">Notes</th></tr></thead>
+          <tbody>
+            <tr><td><input type="text" class="lbl-cell" value="Current (0–30 days)" readonly></td><td><input type="text" id="abt-cur" placeholder="$—" oninput="as()"></td><td><input type="text" id="abt-cur-n" placeholder="" oninput="as()"></td></tr>
+            <tr><td><input type="text" class="lbl-cell" value="31–60 days" readonly></td><td><input type="text" id="abt-60" placeholder="$—" oninput="as()"></td><td><input type="text" id="abt-60-n" placeholder="" oninput="as()"></td></tr>
+            <tr><td><input type="text" class="lbl-cell" value="61–90 days" readonly></td><td><input type="text" id="abt-90" placeholder="$—" oninput="as()"></td><td><input type="text" id="abt-90-n" placeholder="" oninput="as()"></td></tr>
+            <tr><td><input type="text" class="lbl-cell" value="90+ days" readonly></td><td><input type="text" id="abt-90p" placeholder="$—" oninput="as()"></td><td><input type="text" id="abt-90p-n" placeholder="" oninput="as()"></td></tr>
+            <tr><td><input type="text" class="lbl-cell-bold" value="Total A/R" readonly></td><td><input type="text" id="abt-tot" placeholder="$—" oninput="as()"></td><td><input type="text" id="abt-tot-n" placeholder="" oninput="as()"></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <hr class="divdr">
+      <div class="tbl-wrap" style="margin-top:1rem">
+        <div class="tbl-lbl">County Cab — A/R Aging</div>
+        <table>
+          <thead><tr><th class="cw-lg">Aging Bucket</th><th class="cw-md">Amount</th><th class="cw-flex">Notes</th></tr></thead>
+          <tbody>
+            <tr><td><input type="text" class="lbl-cell" value="Current (0–30 days)" readonly></td><td><input type="text" id="acc-cur" placeholder="$—" oninput="as()"></td><td><input type="text" id="acc-cur-n" placeholder="" oninput="as()"></td></tr>
+            <tr><td><input type="text" class="lbl-cell" value="31–60 days" readonly></td><td><input type="text" id="acc-60" placeholder="$—" oninput="as()"></td><td><input type="text" id="acc-60-n" placeholder="" oninput="as()"></td></tr>
+            <tr><td><input type="text" class="lbl-cell" value="61–90 days" readonly></td><td><input type="text" id="acc-90" placeholder="$—" oninput="as()"></td><td><input type="text" id="acc-90-n" placeholder="" oninput="as()"></td></tr>
+            <tr><td><input type="text" class="lbl-cell" value="90+ days" readonly></td><td><input type="text" id="acc-90p" placeholder="$—" oninput="as()"></td><td><input type="text" id="acc-90p-n" placeholder="" oninput="as()"></td></tr>
+            <tr><td><input type="text" class="lbl-cell-bold" value="Total A/R" readonly></td><td><input type="text" id="acc-tot" placeholder="$—" oninput="as()"></td><td><input type="text" id="acc-tot-n" placeholder="" oninput="as()"></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <hr class="divdr">
+      <div class="tog-row" onclick="togglePL()">
+        <div class="tog-track" id="plTrack"><div class="tog-thumb"></div></div>
+        <div class="tog-lbl">P&amp;L — 3rd Week of Month</div>
+        <span class="week-badge" id="weekBadge"><span class="week-dot"></span><span id="weekBadgeText">—</span></span>
+      </div>
+      <div class="tog-sec hidden" id="plSec" style="max-height:500px">
+        <div class="tbl-wrap" style="margin-top:.85rem">
+          <div class="tbl-lbl">Previous Month — P&amp;L Summary</div>
+          <table>
+            <thead><tr><th class="cw-lg">Line Item</th><th class="cw-md">BT Amount</th><th class="cw-md">CC Amount</th><th class="cw-flex">Notes</th></tr></thead>
+            <tbody>
+              <tr><td><input type="text" class="lbl-cell" value="Revenue" readonly></td><td><input type="text" id="pl-bt-rev" placeholder="$—" oninput="as()"></td><td><input type="text" id="pl-cc-rev" placeholder="$—" oninput="as()"></td><td><input type="text" placeholder="" oninput="as()"></td></tr>
+              <tr><td><input type="text" class="lbl-cell" value="Gross Profit" readonly></td><td><input type="text" id="pl-bt-gp" placeholder="$—" oninput="as()"></td><td><input type="text" id="pl-cc-gp" placeholder="$—" oninput="as()"></td><td><input type="text" placeholder="" oninput="as()"></td></tr>
+              <tr><td><input type="text" class="lbl-cell" value="GP %" readonly></td><td><input type="text" id="pl-bt-gppct" placeholder="—%" oninput="as()"></td><td><input type="text" id="pl-cc-gppct" placeholder="—%" oninput="as()"></td><td><input type="text" placeholder="" oninput="as()"></td></tr>
+              <tr><td><input type="text" class="lbl-cell" value="Net Income" readonly></td><td><input type="text" id="pl-bt-ni" placeholder="$—" oninput="as()"></td><td><input type="text" id="pl-cc-ni" placeholder="$—" oninput="as()"></td><td><input type="text" placeholder="" oninput="as()"></td></tr>
+              <tr><td><input type="text" class="lbl-cell" value="NI %" readonly></td><td><input type="text" id="pl-bt-nipct" placeholder="—%" oninput="as()"></td><td><input type="text" id="pl-cc-nipct" placeholder="—%" oninput="as()"></td><td><input type="text" placeholder="" oninput="as()"></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── MELONY ── -->
+  <div class="sc" style="animation-delay:.16s">
+    <div class="sc-hdr" onclick="tog('melony')">
+      <div class="sc-dot" style="background:var(--red)"></div>
+      <div style="flex:1"><div class="sc-title">Melony</div><div class="sc-sub">Service Incidents</div></div>
+      <svg class="chev" id="chev-melony" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6,4 10,8 6,12"/></svg>
+    </div>
+    <div class="sc-body" id="body-melony">
+      <div class="tbl-wrap">
+        <div class="tbl-lbl">Previous Week — Service Incidents</div>
+        <table>
+          <thead><tr>
+            <th class="cw-sm">Res #</th>
+            <th class="cw-md">Root Cause</th>
+            <th class="cw-flex">Description</th>
+            <th class="cw-flex">Resolution</th>
+            <th class="cw-act"></th>
+          </tr></thead>
+          <tbody id="tb-melony"></tbody>
+        </table>
+        <button class="add-row" onclick="addRow('melony',melonyRow)">+ Add incident</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── JARELL ── -->
+  <div class="sc" style="animation-delay:.20s">
+    <div class="sc-hdr" onclick="tog('jarell')">
+      <div class="sc-dot" style="background:var(--teal)"></div>
+      <div style="flex:1"><div class="sc-title">Jarell</div><div class="sc-sub">Chauffeur Compliance / Scheduling</div></div>
+      <svg class="chev" id="chev-jarell" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6,4 10,8 6,12"/></svg>
+    </div>
+    <div class="sc-body" id="body-jarell">
+      <div class="tbl-wrap">
+        <div class="tbl-lbl">Safety Scores — Chauffeurs Below 90</div>
+        <table>
+          <thead><tr><th class="cw-xl">Chauffeur Name</th><th class="cw-sm">Score</th><th class="cw-flex">Coaching Steps Being Taken</th><th class="cw-act"></th></tr></thead>
+          <tbody id="tb-jarell"></tbody>
+        </table>
+        <button class="add-row" onclick="addRow('jarell',jarellRow)">+ Add chauffeur</button>
+      </div>
+      <div class="nf"><div class="fl">Scheduling Status</div><textarea id="jarell-sched" placeholder="Heavy days, coverage concerns, OOT trips, trips of concern…" oninput="as()"></textarea></div>
+    </div>
+  </div>
+
+  <!-- ── CASEY ── -->
+  <div class="sc" style="animation-delay:.24s">
+    <div class="sc-hdr" onclick="tog('casey')">
+      <div class="sc-dot" style="background:var(--purple)"></div>
+      <div style="flex:1"><div class="sc-title">Casey</div><div class="sc-sub">Education &amp; Development</div></div>
+      <svg class="chev" id="chev-casey" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6,4 10,8 6,12"/></svg>
+    </div>
+    <div class="sc-body" id="body-casey">
+      <div class="kpi-row">
+        <div class="kpi-cell"><div class="kpi-lbl">Current Taxi Drivers</div><input type="text" id="casey-count" placeholder="—" oninput="as()"></div>
+        <div class="kpi-cell"><div class="kpi-lbl">Upcoming Launches</div><input type="text" id="casey-launches" placeholder="—" oninput="as()"></div>
+      </div>
+      <div class="tbl-wrap" style="margin-top:1rem">
+        <div class="tbl-lbl">Great Academy — Learning Module Completion (Current Month)</div>
+        <table>
+          <thead><tr><th class="cw-xl">Chauffeur Name</th><th class="cw-pct">% Complete</th><th class="cw-flex">Notes</th><th class="cw-act"></th></tr></thead>
+          <tbody id="tb-casey"></tbody>
+        </table>
+        <button class="add-row" onclick="addRow('casey',caseyRow)">+ Add chauffeur</button>
+      </div>
+      <div class="nf"><div class="fl">Scheduled Education Sessions</div><textarea id="casey-edu" placeholder="Upcoming sessions, topics, attendee counts, dates…" oninput="as()"></textarea></div>
+    </div>
+  </div>
+
+  <!-- ── LEXI ── -->
+  <div class="sc" style="animation-delay:.28s">
+    <div class="sc-hdr" onclick="tog('lexi')">
+      <div class="sc-dot" style="background:var(--accent)"></div>
+      <div style="flex:1"><div class="sc-title">Lexi</div><div class="sc-sub">Recruiting / HR</div></div>
+      <svg class="chev" id="chev-lexi" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6,4 10,8 6,12"/></svg>
+    </div>
+    <div class="sc-body" id="body-lexi">
+      <div class="tbl-wrap">
+        <div class="tbl-lbl">Taxi Driver Pipeline</div>
+        <table>
+          <thead><tr><th class="cw-xl">Stage</th><th class="cw-sm"># in Stage</th><th class="cw-flex">Notes</th></tr></thead>
+          <tbody>
+            <tr><td><input type="text" class="lbl-cell" value="Application" readonly></td><td><input type="text" id="lexi-taxi-app" placeholder="—" oninput="as()"></td><td><input type="text" id="lexi-taxi-app-n" placeholder="" oninput="as()"></td></tr>
+            <tr><td><input type="text" class="lbl-cell" value="Screening" readonly></td><td><input type="text" id="lexi-taxi-screen" placeholder="—" oninput="as()"></td><td><input type="text" id="lexi-taxi-screen-n" placeholder="" oninput="as()"></td></tr>
+            <tr><td><input type="text" class="lbl-cell" value="Onboarding" readonly></td><td><input type="text" id="lexi-taxi-onboard" placeholder="—" oninput="as()"></td><td><input type="text" id="lexi-taxi-onboard-n" placeholder="" oninput="as()"></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <hr class="divdr">
+      <div class="tbl-wrap" style="margin-top:1rem">
+        <div class="tbl-lbl">Info Sessions</div>
+        <table>
+          <thead><tr><th class="cw-xl">Metric</th><th class="cw-sm">Count</th><th class="cw-flex">Notes</th></tr></thead>
+          <tbody>
+            <tr><td><input type="text" class="lbl-cell" value="Attendees — Previous Week" readonly></td><td><input type="text" id="lexi-info-att" placeholder="—" oninput="as()"></td><td><input type="text" id="lexi-info-att-n" placeholder="" oninput="as()"></td></tr>
+            <tr><td><input type="text" class="lbl-cell" value="Moving Forward" readonly></td><td><input type="text" id="lexi-info-fwd" placeholder="—" oninput="as()"></td><td><input type="text" id="lexi-info-fwd-n" placeholder="" oninput="as()"></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <hr class="divdr">
+      <div class="tbl-wrap" style="margin-top:1rem">
+        <div class="tbl-lbl">Chauffeur Pipeline</div>
+        <table>
+          <thead><tr><th class="cw-xl">Metric</th><th class="cw-sm">Count</th><th class="cw-flex">Notes</th></tr></thead>
+          <tbody>
+            <tr><td><input type="text" class="lbl-cell" value="Chauffeurs (Current)" readonly></td><td><input type="text" id="lexi-chauf-cur" placeholder="—" oninput="as()"></td><td><input type="text" id="lexi-chauf-cur-n" placeholder="" oninput="as()"></td></tr>
+            <tr><td><input type="text" class="lbl-cell" value="Chauffeurs Needed" readonly></td><td><input type="text" id="lexi-chauf-need" placeholder="—" oninput="as()"></td><td><input type="text" id="lexi-chauf-need-n" placeholder="" oninput="as()"></td></tr>
+            <tr><td><input type="text" class="lbl-cell" value="Candidates in Pipeline" readonly></td><td><input type="text" id="lexi-chauf-pipe" placeholder="—" oninput="as()"></td><td><input type="text" id="lexi-chauf-pipe-n" placeholder="" oninput="as()"></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="nf"><div class="fl">Notes</div><textarea id="lexi-notes" placeholder="Pipeline highlights, bottlenecks, upcoming interviews…" oninput="as()"></textarea></div>
+    </div>
+  </div>
+
+  <!-- ── JOSEPH M ── -->
+  <div class="sc" style="animation-delay:.32s">
+    <div class="sc-hdr" onclick="tog('joseph')">
+      <div class="sc-dot" style="background:var(--teal)"></div>
+      <div style="flex:1"><div class="sc-title">Joseph M</div><div class="sc-sub">VICC / Call Center</div></div>
+      <svg class="chev" id="chev-joseph" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6,4 10,8 6,12"/></svg>
+    </div>
+    <div class="sc-body" id="body-joseph">
+      <div class="tbl-wrap">
+        <div class="tbl-lbl">VICC &amp; Call Center Metrics</div>
+        <table>
+          <thead><tr><th class="cw-xl">Metric</th><th class="cw-md">Value</th><th class="cw-flex">Notes</th></tr></thead>
+          <tbody>
+            <tr><td><input type="text" class="lbl-cell" value="Daily Recurring VICC Routes" readonly></td><td><input type="text" id="joseph-recurring" placeholder="—" oninput="as()"></td><td><input type="text" id="joseph-recurring-n" placeholder="" oninput="as()"></td></tr>
+            <tr><td><input type="text" class="lbl-cell" value="Unassigned Daily VICC Routes" readonly></td><td><input type="text" id="joseph-unassigned" placeholder="—" oninput="as()"></td><td><input type="text" id="joseph-unassigned-n" placeholder="" oninput="as()"></td></tr>
+            <tr><td><input type="text" class="lbl-cell" value="Calls / Agent (Previous Week)" readonly></td><td><input type="text" id="joseph-calls" placeholder="—" oninput="as()"></td><td><input type="text" id="joseph-calls-n" placeholder="" oninput="as()"></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="nf"><div class="fl">Notes</div><textarea id="joseph-notes" placeholder="Coverage gaps, agent performance highlights, escalations…" oninput="as()"></textarea></div>
+    </div>
+  </div>
+
+  <!-- ACTIONS -->
+  <div class="btn-row">
+    <button class="btn btn-accent" onclick="expandAll()">Expand All</button>
+    <button class="btn btn-ghost" onclick="window.print()">Print / Export</button>
+    <button class="btn btn-danger" onclick="showReset()">Archive &amp; Reset Now</button>
+  </div>
+  <div class="reset-confirm" id="resetBox">
+    <p>This will archive the current agenda and clear all fields for a fresh week. Are you sure?</p>
+    <div style="display:flex;gap:.6rem">
+      <button class="btn btn-accent" onclick="doReset()">Yes, archive &amp; reset</button>
+      <button class="btn btn-ghost" onclick="hideReset()">Cancel</button>
+    </div>
+  </div>
+
+</div><!-- /view-agenda -->
+
+<!-- ═══════════ ARCHIVE VIEW ═══════════ -->
+<div id="view-archive" style="display:none">
+  <div id="arcList"><div class="empty-arc">No archived agendas yet</div></div>
+</div>
+
+</div><!-- /app -->
+<script>
+// ── POWER AUTOMATE FLOW URLS ──
+const SAVE_URL='https://defaultd0775273a1ef4b2ebe621f7cbc41f4.ed.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/d8a5931df1af439a8fd859315f022f56/triggers/manual/paths/invoke?api-version=1';
+const LOAD_URL='https://defaultd0775273a1ef4b2ebe621f7cbc41f4.ed.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/e26f453dc8bf4cfea0be76e558da41b4/triggers/manual/paths/invoke?api-version=1';
+
+// ── LOCAL FALLBACK KEYS (used only if PA is unavailable) ──
+const LK='bt_sma_live5',AK='bt_sma_arc5',SK='bt_sma_stamp5',RK='bt_sma_reset5',PK='bt_sma_pl5';
+
+// ── DATE + WEEK-OF-MONTH ──
+function nextWed(){const d=new Date(),diff=(3-d.getDay()+7)%7||7;d.setDate(d.getDate()+diff);return d}
+function fDate(d){return d.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'})}
+function fShort(d){return d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}
+function fWeek(d){const m=new Date(d),b=d.getDay()===0?6:d.getDay()-1;m.setDate(d.getDate()-b);return 'Week of '+m.toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'})}
+
+// Week-of-month number (1=first, 2=second, 3=third, 4=fourth)
+function weekOfMonth(d){return Math.ceil(d.getDate()/7)}
+function isThirdWeek(){return weekOfMonth(new Date())===3}
+
+function updateWeekBadge(){
+  const wom=weekOfMonth(new Date());
+  const names=['','1st week','2nd week','3rd week','4th week','5th week'];
+  const badge=document.getElementById('weekBadge');
+  const txt=document.getElementById('weekBadgeText');
+  const is3rd=wom===3;
+  txt.textContent=names[wom]||'';
+  badge.classList.toggle('active',is3rd);
+}
+
+document.getElementById('dateDisplay').textContent=fDate(nextWed());
+updateWeekBadge();
+
+// ── ROW TEMPLATES ──
+const christineRow=()=>`<tr>
+  <td><input type="text" placeholder="e.g. January, February…" oninput="as()"></td>
+  <td><input type="text" placeholder="$—" oninput="as()"></td>
+  <td><input type="text" placeholder="$—" oninput="as()"></td>
+  <td><input type="text" class="pct-inp" placeholder="—%" oninput="as()"></td>
+  <td class="cw-act"><button class="row-del" onclick="delRow(this)">×</button></td></tr>`;
+
+const oosRow=()=>`<tr>
+  <td><input type="text" placeholder="e.g. 412" oninput="as()"></td>
+  <td><input type="text" placeholder="Vendor / shop" oninput="as()"></td>
+  <td><input type="text" placeholder="Brief description" oninput="as()"></td>
+  <td><input type="text" placeholder="mm/dd" oninput="as()"></td>
+  <td><input type="text" placeholder="" oninput="as()"></td>
+  <td class="cw-act"><button class="row-del" onclick="delRow(this)">×</button></td></tr>`;
+
+const melonyRow=()=>`<tr>
+  <td><input type="text" placeholder="e.g. 10042" oninput="as()"></td>
+  <td><select onchange="as()"><option value="">Select…</option><option>Chauffeur</option><option>Dispatch</option><option>Sales</option><option>Other</option></select></td>
+  <td><textarea placeholder="What happened…" oninput="as()"></textarea></td>
+  <td><textarea placeholder="How it was resolved…" oninput="as()"></textarea></td>
+  <td class="cw-act"><button class="row-del" onclick="delRow(this)">×</button></td></tr>`;
+
+const jarellRow=()=>`<tr>
+  <td><input type="text" placeholder="Chauffeur full name" oninput="as()"></td>
+  <td><input type="text" placeholder="e.g. 84" oninput="as()"></td>
+  <td><textarea placeholder="Coaching plan, sessions scheduled, actions taken…" oninput="as()"></textarea></td>
+  <td class="cw-act"><button class="row-del" onclick="delRow(this)">×</button></td></tr>`;
+
+const caseyRow=()=>`<tr>
+  <td><input type="text" placeholder="Chauffeur full name" oninput="as()"></td>
+  <td><input type="text" class="pct-inp" placeholder="—%" oninput="as()"></td>
+  <td><input type="text" placeholder="" oninput="as()"></td>
+  <td class="cw-act"><button class="row-del" onclick="delRow(this)">×</button></td></tr>`;
+
+const TBLS={
+  'tb-christine':christineRow,
+  'tb-clinton-bt':oosRow,
+  'tb-clinton-cc':oosRow,
+  'tb-melony':melonyRow,
+  'tb-jarell':jarellRow,
+  'tb-casey':caseyRow
+};
+
+function addRow(id,fn){document.getElementById('tb-'+id).insertAdjacentHTML('beforeend',fn());as()}
+function delRow(btn){btn.closest('tr').remove();as()}
+
+// ── SECTIONS ──
+const SECS=['christine','clinton','april','melony','jarell','casey','lexi','joseph'];
+function tog(id){
+  document.getElementById('body-'+id).classList.toggle('open');
+  document.getElementById('chev-'+id).classList.toggle('open');
+  updateProg();
+}
+function expandAll(){SECS.forEach(s=>{document.getElementById('body-'+s).classList.add('open');document.getElementById('chev-'+s).classList.add('open')})}
+
+// ── P&L TOGGLE ──
+let plOn=false;
+function togglePL(){
+  plOn=!plOn;
+  document.getElementById('plTrack').classList.toggle('on',plOn);
+  document.getElementById('plSec').classList.toggle('hidden',!plOn);
+  localStorage.setItem(PK,plOn?'1':'0');
+  as();
+}
+
+// ── PROGRESS ──
+function secHas(s){
+  const b=document.getElementById('body-'+s);
+  if(!b)return false;
+  return [...b.querySelectorAll('input[type="text"],textarea')].some(el=>!el.readOnly&&!el.getAttribute('readonly')&&el.value.trim());
+}
+function updateProg(){
+  const f=SECS.filter(secHas).length;
+  document.getElementById('progFill').style.width=Math.round(f/SECS.length*100)+'%';
+  document.getElementById('progLabel').textContent=f+' of '+SECS.length+' sections with content';
+}
+
+// ── SAVE / LOAD ──
+let st;
+function as(){clearTimeout(st);st=setTimeout(saveNow,800);updateProg()}
+
+function setStatus(msg){document.getElementById('statusText').textContent=msg}
+
+function getWeekDate(){
+  const now=new Date(),back=now.getDay()===0?6:now.getDay()-1,mon=new Date(now);
+  mon.setDate(now.getDate()-back);mon.setHours(0,0,0,0);
+  return mon.toISOString().split('T')[0];
+}
+
+async function saveNow(){
+  const data=gather();
+  localStorage.setItem(LK,JSON.stringify(data));
+  const n=new Date();localStorage.setItem(SK,n.toISOString());
+  setStatus('Saving…');
+  try{
+    const resp=await fetch(SAVE_URL,{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({weekDate:getWeekDate(),agendaData:JSON.stringify(data),savedBy:'team'})});
+    if(resp.ok){setStatus('Saved · '+n.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'}));}
+    else{setStatus('Saved locally — SharePoint sync failed ('+resp.status+')');}
+  }catch(e){setStatus('Saved locally — SharePoint unavailable');}
+}
+
+async function loadFromSharePoint(){
+  setStatus('Loading…');
+  try{
+    const resp=await fetch(LOAD_URL,{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({weekDate:getWeekDate()})});
+    if(!resp.ok)throw new Error('HTTP '+resp.status);
+    const json=await resp.json();
+    if(json.found&&json.agendaData){
+      const data=typeof json.agendaData==='string'?JSON.parse(json.agendaData):json.agendaData;
+      restore(data);
+      if(json.archivedData){try{const arc=typeof json.archivedData==='string'?JSON.parse(json.archivedData):json.archivedData;
+        if(Array.isArray(arc)&&arc.length){localStorage.setItem(AK,JSON.stringify(arc));document.getElementById('arcCount').textContent=arc.length;}}catch{}}
+      setStatus('Loaded · shared data · '+new Date().toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'}));
+    }else{setStatus('Ready · no data yet this week');}
+  }catch(e){
+    const s=localStorage.getItem(LK);if(s){try{restore(JSON.parse(s));}catch{}}
+    const stamp=localStorage.getItem(SK);
+    setStatus(stamp?'Loaded locally — SharePoint unavailable':'SharePoint unavailable — working offline');
+  }
+}
+
+function gather(){
+  const d={_date:new Date().toISOString(),_pl:plOn};
+  document.querySelectorAll('[id]').forEach(el=>{
+    if((el.tagName==='INPUT'&&el.type==='text')||el.tagName==='TEXTAREA'){
+      if(!el.readOnly&&!el.getAttribute('readonly'))d[el.id]=el.value;
+    }
+  });
+  Object.keys(TBLS).forEach(tbid=>{
+    const tb=document.getElementById(tbid);if(!tb)return;
+    d['_t_'+tbid]=[...tb.querySelectorAll('tr')].map(tr=>
+      [...tr.querySelectorAll('input,textarea,select')].map(el=>el.value)
+    );
+  });
+  return d;
+}
+
+function restore(d){
+  if(!d)return;
+  Object.keys(d).forEach(k=>{
+    if(k.startsWith('_'))return;
+    const el=document.getElementById(k);
+    if(el)el.value=d[k];
+  });
+  if(d._pl){plOn=false;togglePL()}
+  Object.keys(TBLS).forEach(tbid=>{
+    const rows=d['_t_'+tbid];
+    if(!rows||!rows.length)return;
+    const tb=document.getElementById(tbid);if(!tb)return;
+    tb.innerHTML='';
+    rows.forEach(cells=>{
+      tb.insertAdjacentHTML('beforeend',TBLS[tbid]());
+      [...tb.lastElementChild.querySelectorAll('input,textarea,select')].forEach((el,i)=>{if(cells[i]!==undefined)el.value=cells[i]});
+    });
+  });
+  updateProg();
+}
+
+// ── TABS ──
+function switchTab(t){
+  document.getElementById('view-agenda').style.display=t==='agenda'?'':'none';
+  document.getElementById('view-archive').style.display=t==='archive'?'':'none';
+  document.getElementById('tab-agenda').classList.toggle('active',t==='agenda');
+  document.getElementById('tab-archive').classList.toggle('active',t==='archive');
+  if(t==='archive')renderArc();
+}
+
+// ── ARCHIVE & RESET ──
+function getArc(){try{return JSON.parse(localStorage.getItem(AK))||[]}catch{return[]}}
+
+function hasContent(d){
+  if(!d)return false;
+  return Object.keys(d).some(k=>{
+    if(k.startsWith('_t_')){const r=d[k];return r&&r.some(row=>row.some(v=>v&&v.trim()));}
+    if(k.startsWith('_'))return false;
+    return d[k]&&d[k].trim();
+  });
+}
+
+function clearLive(){
+  [...document.querySelectorAll('.sc-body input[type="text"],.sc-body textarea')]
+    .forEach(el=>{if(!el.readOnly&&!el.getAttribute('readonly'))el.value='';});
+  Object.keys(TBLS).forEach(id=>{const tb=document.getElementById(id);if(tb)tb.innerHTML='';});
+  if(plOn){plOn=true;togglePL();}
+  updateProg();localStorage.removeItem(LK);localStorage.removeItem(SK);
+  setStatus('Last saved — never');
+}
+
+async function doReset(){
+  setStatus('Archiving…');
+  const data=gather();
+  if(hasContent(data)){
+    // Build updated archive
+    const arc=getArc();
+    arc.unshift({savedAt:new Date().toISOString(),data});
+    const trimmed=arc.slice(0,12);
+    localStorage.setItem(AK,JSON.stringify(trimmed));
+    document.getElementById('arcCount').textContent=trimmed.length;
+    // Push updated archive to SharePoint via Save flow (piggyback on same row, add archivedData)
+    try{
+      await fetch(SAVE_URL,{method:'POST',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({weekDate:getWeekDate(),agendaData:'{}',archivedData:JSON.stringify(trimmed),savedBy:'reset'})});
+    }catch{}
+  }
+  clearLive();
+  localStorage.setItem(RK,new Date().toISOString());
+  hideReset();
+  setStatus('Reset complete — fresh week ready');
+}
+
+function showReset(){document.getElementById('resetBox').classList.add('visible')}
+function hideReset(){document.getElementById('resetBox').classList.remove('visible')}
+
+// ── AUTO-ARCHIVE ──
+function checkAuto(){
+  const now=new Date(),lr=localStorage.getItem(RK);
+  const back=now.getDay()===0?6:now.getDay()-1;
+  const mon8=new Date(now);mon8.setDate(now.getDate()-back);mon8.setHours(8,0,0,0);
+  if(now>=mon8&&(!lr||new Date(lr)<mon8)){
+    const s=localStorage.getItem(LK);
+    if(s){try{
+      const d=JSON.parse(s);
+      if(hasContent(d)){
+        const arc=getArc();arc.unshift({savedAt:new Date().toISOString(),data:d});
+        localStorage.setItem(AK,JSON.stringify(arc.slice(0,12)));
+      }
+    }catch{}}
+    clearLive();localStorage.setItem(RK,now.toISOString());
+  }
+}
+
+// ── RENDER ARCHIVE ──
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+
+const ARC_DEFS=[
+  {s:'christine',label:'Christine',tbls:[{id:'tb-christine',heads:['Month','Actual','Goal','% of Goal'],label:'Sales Performance'}],
+   flds:[{id:'ytd-actual',label:'YTD Actual'},{id:'ytd-goal',label:'YTD Goal'},{id:'ytd-pct',label:'YTD % of Goal'}]},
+  {s:'clinton',label:'Clinton',
+   tbls:[{id:'tb-clinton-bt',heads:['Unit #','Location','Issue','Est. Return','Notes'],label:'BT Vehicles OOS'},
+         {id:'tb-clinton-cc',heads:['Unit #','Location','Issue','Est. Return','Notes'],label:'CC Vehicles OOS'}],
+   flds:[{id:'clinton-spare-cabs',label:'CC Spare Cabs'},{id:'clinton-spare-drivers',label:'CC Driver Capacity'},{id:'clinton-needs',label:'Vehicle Needs — Next 3 Mo'}]},
+  {s:'april',label:'April',tbls:[],flds:[
+    {id:'abt-cur',label:'BT Current'},{id:'abt-60',label:'BT 31–60d'},{id:'abt-90',label:'BT 61–90d'},{id:'abt-90p',label:'BT 90+d'},{id:'abt-tot',label:'BT Total A/R'},
+    {id:'acc-cur',label:'CC Current'},{id:'acc-60',label:'CC 31–60d'},{id:'acc-90',label:'CC 61–90d'},{id:'acc-90p',label:'CC 90+d'},{id:'acc-tot',label:'CC Total A/R'},
+    {id:'pl-bt-rev',label:'BT Revenue'},{id:'pl-bt-gp',label:'BT Gross Profit'},{id:'pl-bt-gppct',label:'BT GP%'},{id:'pl-bt-ni',label:'BT Net Income'},{id:'pl-bt-nipct',label:'BT NI%'},
+    {id:'pl-cc-rev',label:'CC Revenue'},{id:'pl-cc-gp',label:'CC Gross Profit'},{id:'pl-cc-gppct',label:'CC GP%'},{id:'pl-cc-ni',label:'CC Net Income'},{id:'pl-cc-nipct',label:'CC NI%'}
+  ]},
+  {s:'melony',label:'Melony',tbls:[{id:'tb-melony',heads:['Res #','Root Cause','Description','Resolution'],label:'Service Incidents'}],flds:[]},
+  {s:'jarell',label:'Jarell',tbls:[{id:'tb-jarell',heads:['Chauffeur','Score','Coaching Steps'],label:'Safety Scores Below 90'}],flds:[{id:'jarell-sched',label:'Scheduling Status'}]},
+  {s:'casey',label:'Casey',tbls:[{id:'tb-casey',heads:['Chauffeur','% Complete','Notes'],label:'Great Academy Modules'}],
+   flds:[{id:'casey-count',label:'Taxi Drivers'},{id:'casey-launches',label:'Upcoming Launches'},{id:'casey-edu',label:'Education Sessions'}]},
+  {s:'lexi',label:'Lexi',tbls:[],flds:[
+    {id:'lexi-taxi-app',label:'Taxi — Application'},{id:'lexi-taxi-screen',label:'Taxi — Screening'},{id:'lexi-taxi-onboard',label:'Taxi — Onboarding'},
+    {id:'lexi-info-att',label:'Info Session Attendees'},{id:'lexi-info-fwd',label:'Info — Moving Forward'},
+    {id:'lexi-chauf-cur',label:'Chauffeurs Current'},{id:'lexi-chauf-need',label:'Chauffeurs Needed'},{id:'lexi-chauf-pipe',label:'Candidates in Pipeline'},
+    {id:'lexi-notes',label:'Notes'}
+  ]},
+  {s:'joseph',label:'Joseph M',tbls:[],flds:[{id:'joseph-recurring',label:'VICC Recurring'},{id:'joseph-unassigned',label:'VICC Unassigned'},{id:'joseph-calls',label:'Calls/Agent'},{id:'joseph-notes',label:'Notes'}]}
+];
+
+function renderArc(){
+  const arr=getArc(),c=document.getElementById('arcList');
+  if(!arr.length){c.innerHTML='<div class="empty-arc">No archived agendas yet</div>';return}
+  c.innerHTML=arr.map((entry,idx)=>{
+    const d=new Date(entry.savedAt),dt=entry.data||{};
+    let body='';
+    ARC_DEFS.forEach(def=>{
+      let pc='';
+      def.tbls.forEach(tbl=>{
+        const rows=(dt['_t_'+tbl.id]||[]).filter(r=>r.slice(0,tbl.heads.length).some(v=>v&&v.trim()));
+        if(!rows.length)return;
+        pc+=`<div style="margin-bottom:.65rem"><div class="arc-fl" style="margin-bottom:.3rem">${tbl.label}</div>
+        <table class="arc-tbl"><thead><tr>${tbl.heads.map(h=>`<th>${h}</th>`).join('')}</tr></thead>
+        <tbody>${rows.map(r=>'<tr>'+r.slice(0,tbl.heads.length).map(v=>`<td>${esc(v)}</td>`).join('')+'</tr>').join('')}</tbody></table></div>`;
+      });
+      def.flds.filter(f=>dt[f.id]&&dt[f.id].trim()).forEach(f=>{
+        pc+=`<div class="arc-field"><div class="arc-fl">${f.label}</div><div class="arc-fv">${esc(dt[f.id])}</div></div>`;
+      });
+      if(pc)body+=`<div class="arc-person"><div class="arc-pname">${def.label}</div>${pc}</div>`;
+    });
+    if(!body)body='<div style="color:var(--faint);font-size:.82rem">No content recorded.</div>';
+    return `<div class="arc-week">
+      <div class="arc-wk-hdr" onclick="togArc(${idx})">
+        <div><div class="arc-wk-date">${fWeek(d)}</div><div class="arc-wk-meta">Archived ${fShort(d)} at ${d.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'})}</div></div>
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="var(--muted)" stroke-width="2"><polyline points="6,4 10,8 6,12"/></svg>
+      </div>
+      <div class="arc-body" id="arc-body-${idx}">${body}</div>
+    </div>`;
+  }).join('');
+}
+function togArc(i){document.getElementById('arc-body-'+i).classList.toggle('open')}
+
+// ── INIT ──
+(async function(){
+  checkAuto();
+  // Try SharePoint first; fall back to localStorage
+  await loadFromSharePoint();
+  if(localStorage.getItem(PK)==='1'&&!plOn){plOn=false;togglePL();}
+  document.getElementById('arcCount').textContent=getArc().length;
+  updateProg();
+  // Poll for updates every 30s when tab is not focused
+  setInterval(async()=>{
+    if(!document.hidden)return;
+    try{
+      const resp=await fetch(LOAD_URL,{method:'POST',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({weekDate:getWeekDate()})});
+      if(resp.ok){const j=await resp.json();if(j.found&&j.agendaData){
+        const d=typeof j.agendaData==='string'?JSON.parse(j.agendaData):j.agendaData;restore(d);
+      }}
+    }catch{}
+  },30000);
+})();
+</script>
+</body>
+</html>
